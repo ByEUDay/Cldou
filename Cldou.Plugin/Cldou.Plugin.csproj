@@ -1,0 +1,61 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+    <AssemblyName>Cldou.Plugin</AssemblyName>
+    <RootNamespace>Cldou.Plugin</RootNamespace>
+    <Version>0.1.0</Version>
+    <Description>Cldou — Hollow Knight 运行时 Mod 加载器（以 BepInEx 插件形态运行，零 IL 补丁）。</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="System.Core" />
+  </ItemGroup>
+
+  <!-- ============ 游戏引用（由 Directory.Build.props 自动探测；可 -p:CldouGameDir=... 覆盖） ============ -->
+  <ItemGroup Condition="Exists('$(CldouManagedDir)/UnityEngine.dll')">
+    <Reference Include="UnityEngine">
+      <HintPath>$(CldouManagedDir)/UnityEngine.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup Condition="Exists('$(CldouManagedDir)/UnityEngine.CoreModule.dll')">
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>$(CldouManagedDir)/UnityEngine.CoreModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup Condition="Exists('$(CldouManagedDir)/UnityEngine.InputLegacyModule.dll')">
+    <Reference Include="UnityEngine.InputLegacyModule">
+      <HintPath>$(CldouManagedDir)/UnityEngine.InputLegacyModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+  <!-- ============ BepInEx 引用 ============ -->
+  <ItemGroup Condition="Exists('$(CldouBepInExCore)/BepInEx.dll')">
+    <Reference Include="BepInEx">
+      <HintPath>$(CldouBepInExCore)/BepInEx.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup Condition="!Exists('$(CldouBepInExCore)/BepInEx.dll')">
+    <!-- 回退：本机没有 BepInEx 时从 NuGet 取编译期引用（运行时必须由游戏内 BepInEx 提供） -->
+    <PackageReference Include="BepInEx.Core" Version="5.4.21" PrivateAssets="all" ExcludeAssets="runtime" />
+  </ItemGroup>
+
+  <!-- ============ 内部项目 ============ -->
+  <ItemGroup>
+    <ProjectReference Include="..\Cldou.Core\Cldou.Core.csproj" Private="true" />
+    <ProjectReference Include="..\Cldou.Api\Cldou.Api.csproj" Private="true" />
+    <ProjectReference Include="..\Cldou.Runtime\Cldou.Runtime.csproj" Private="true" />
+  </ItemGroup>
+
+</Project>

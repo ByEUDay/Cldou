@@ -1,0 +1,117 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+    <AssemblyName>Cldou.Bootstrap</AssemblyName>
+    <RootNamespace>Cldou.Bootstrap</RootNamespace>
+    <Description>Cldou 独立模式引导器：Doorstop target_assembly，入口 static void Doorstop.Entrypoint.Start()。</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="System.Core" />
+  </ItemGroup>
+
+  <!-- ============ Unity / 游戏程序集（由 Directory.Build.props 自动探测） ============ -->
+  <ItemGroup Condition="Exists('$(CldouManagedDir)/UnityEngine.dll')">
+    <Reference Include="UnityEngine">
+      <HintPath>$(CldouManagedDir)/UnityEngine.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup Condition="Exists('$(CldouManagedDir)/UnityEngine.CoreModule.dll')">
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>$(CldouManagedDir)/UnityEngine.CoreModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup Condition="Exists('$(CldouManagedDir)/UnityEngine.InputLegacyModule.dll')">
+    <Reference Include="UnityEngine.InputLegacyModule">
+      <HintPath>$(CldouManagedDir)/UnityEngine.InputLegacyModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+  <!-- 游戏主程序集：帧回调目标 GameManager（仅在运行时解析，编译期只做类型检查） -->
+  <ItemGroup Condition="Exists('$(CldouManagedDir)/Assembly-CSharp.dll')">
+    <Reference Include="Assembly-CSharp">
+      <HintPath>$(CldouManagedDir)/Assembly-CSharp.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+  <!-- ============ MonoMod RuntimeDetour（优先仓库内置 lib/monomod；随独立包分发 Private=true） ============ -->
+  <ItemGroup Condition="Exists('$(CldouMonoModDir)/MonoMod.RuntimeDetour.dll')">
+    <Reference Include="MonoMod.RuntimeDetour">
+      <HintPath>$(CldouMonoModDir)/MonoMod.RuntimeDetour.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
+    <Reference Include="MonoMod.Utils">
+      <HintPath>$(CldouMonoModDir)/MonoMod.Utils.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup Condition="!Exists('$(CldouMonoModDir)/MonoMod.RuntimeDetour.dll') AND Exists('$(CldouBepInExCore)/MonoMod.RuntimeDetour.dll')">
+    <Reference Include="MonoMod.RuntimeDetour">
+      <HintPath>$(CldouBepInExCore)/MonoMod.RuntimeDetour.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
+    <Reference Include="MonoMod.Utils">
+      <HintPath>$(CldouBepInExCore)/MonoMod.Utils.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup Condition="!Exists('$(CldouMonoModDir)/MonoMod.RuntimeDetour.dll') AND !Exists('$(CldouBepInExCore)/MonoMod.RuntimeDetour.dll') AND Exists('$(CldouManagedDir)/MonoMod.RuntimeDetour.dll')">
+    <Reference Include="MonoMod.RuntimeDetour">
+      <HintPath>$(CldouManagedDir)/MonoMod.RuntimeDetour.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
+    <Reference Include="MonoMod.Utils">
+      <HintPath>$(CldouManagedDir)/MonoMod.Utils.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
+  </ItemGroup>
+
+  <!-- ============ HarmonyX + Mono.Cecil（帧回调策略 / 工具链依赖；随独立包分发） ============ -->
+  <ItemGroup Condition="Exists('$(CldouMonoModDir)/0Harmony.dll')">
+    <Reference Include="0Harmony">
+      <HintPath>$(CldouMonoModDir)/0Harmony.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup Condition="!Exists('$(CldouMonoModDir)/0Harmony.dll') AND Exists('$(CldouBepInExCore)/0Harmony.dll')">
+    <Reference Include="0Harmony">
+      <HintPath>$(CldouBepInExCore)/0Harmony.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup Condition="Exists('$(CldouMonoModDir)/Mono.Cecil.dll')">
+    <Reference Include="Mono.Cecil">
+      <HintPath>$(CldouMonoModDir)/Mono.Cecil.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup Condition="!Exists('$(CldouMonoModDir)/Mono.Cecil.dll') AND Exists('$(CldouBepInExCore)/Mono.Cecil.dll')">
+    <Reference Include="Mono.Cecil">
+      <HintPath>$(CldouBepInExCore)/Mono.Cecil.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Cldou.Core\Cldou.Core.csproj" Private="true" />
+    <ProjectReference Include="..\Cldou.Api\Cldou.Api.csproj" Private="true" />
+    <ProjectReference Include="..\Cldou.Runtime\Cldou.Runtime.csproj" Private="true" />
+  </ItemGroup>
+
+</Project>

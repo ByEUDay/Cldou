@@ -1,0 +1,44 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+    <AssemblyName>Cldou.Runtime</AssemblyName>
+    <RootNamespace>Cldou.Runtime</RootNamespace>
+    <Description>Cldou 运行时内核（宿主无关）：发现 / 求解 / 字节注入 / 生命周期 / 热重载 / 熔断 / 快照。</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="System.Core" />
+  </ItemGroup>
+
+  <ItemGroup Condition="Exists('$(CldouManagedDir)/UnityEngine.dll')">
+    <Reference Include="UnityEngine">
+      <HintPath>$(CldouManagedDir)/UnityEngine.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup Condition="Exists('$(CldouManagedDir)/UnityEngine.CoreModule.dll')">
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>$(CldouManagedDir)/UnityEngine.CoreModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup Condition="Exists('$(CldouManagedDir)/UnityEngine.InputLegacyModule.dll')">
+    <Reference Include="UnityEngine.InputLegacyModule">
+      <HintPath>$(CldouManagedDir)/UnityEngine.InputLegacyModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Cldou.Core\Cldou.Core.csproj" Private="true" />
+    <ProjectReference Include="..\Cldou.Api\Cldou.Api.csproj" Private="true" />
+  </ItemGroup>
+
+</Project>

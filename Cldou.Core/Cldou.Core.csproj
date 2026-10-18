@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>Cldou.Core</AssemblyName>
+    <RootNamespace>Cldou.Core</RootNamespace>
+    <Description>Cldou 核心算法库（无游戏依赖）：清单解析、语义化版本、依赖求解、事件总线、故障诊断。</Description>
+  </PropertyGroup>
+
+</Project>
